@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Brand- und Elektroservice – Ihr kompetenter Ansprechpartner für Brandschutz und Elektrotechnik in Frankfurt, Wiesbaden, Mainz, Darmstadt und Umgebung.">
+<title>Brand & Elektroservice · Brandschutz & Elektrotechnik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ADMIN LOGIN OVERLAY -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-login" style="position:relative">
+    <button class="admin-close" id="admin-close">✕</button>
+    <h3>🔒 Admin-Zugang</h3>
+    <p>Passwort eingeben, um Anfragen zu verwalten.</p>
+    <input type="password" id="admin-pw" placeholder="Passwort" autocomplete="off">
+    <button class="admin-login-btn" id="admin-login-btn">Einloggen</button>
+    <p class="admin-error" id="admin-error">Falsches Passwort.</p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-header">
+    <h2>Anfragen <em>verwalten</em></h2>
+    <button class="admin-logout" id="admin-logout">Abmelden ✕</button>
+  </div>
+  <div class="admin-body">
+    <div class="admin-stats">
+      <div class="admin-stat"><div class="num" id="admin-total"><em>0</em></div><div class="lbl">Anfragen gesamt</div></div>
+      <div class="admin-stat"><div class="num" id="admin-new"><em>0</em></div><div class="lbl">Neue Anfragen</div></div>
+      <div class="admin-stat"><div class="num" id="admin-done"><em>0</em></div><div class="lbl">Erledigt</div></div>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Datum</th><th>Name</th><th>E-Mail</th><th>Anliegen</th><th>Nachricht</th><th>Status</th><th>Aktionen</th></tr></thead>
+        <tbody id="admin-leads-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo" aria-label="Brand & Elektroschutz Chemnitz">
+      <svg class="logo-mark" viewBox="0 0 80 100" fill="none"><defs><linearGradient id="fo" x1=".3" y1="0" x2=".7" y2="1"><stop stop-color="#e8501a"/><stop offset="1" stop-color="#d94315"/></linearGradient><linearGradient id="fm" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#f2832e"/><stop offset="1" stop-color="#e66b20"/></linearGradient><linearGradient id="fi" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#f5d94a"/><stop offset="1" stop-color="#e8c425"/></linearGradient></defs><path d="M40 2C38 8 32 20 28 32 22 48 16 58 12 68 8 78 14 96 32 96 22 88 20 76 28 62 34 52 48 36 52 24 56 14 54 4 40 2Z" fill="url(#fo)"/><path d="M42 18C40 26 36 36 34 46 30 60 28 70 30 80 32 90 42 96 50 88 40 84 36 74 40 62 44 50 54 38 56 28 58 18 52 12 42 18Z" fill="url(#fm)"/><path d="M44 38C42 46 40 54 40 62 40 72 44 80 50 82 46 76 46 68 48 60 50 52 54 44 52 38 50 34 46 34 44 38Z" fill="url(#fi)"/></svg>
+      <span class="logo-text">Brand <span class="amp">&amp;</span> Elektroservice<span class="logo-sub">Frankfurt · Rhein-Main</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Über uns</a></li>
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="tel:+4915563653528" class="nav-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.11 2 2 0 014.11 2h3a2 2 0 012 1.72c.12.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0122 16.92z"/></svg>
+      <span class="nav-cta-label">Anrufen</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menü"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" data-reveal>Frankfurt · Wiesbaden · Mainz · Darmstadt</p>
+    <h1 class="hero-headline" data-reveal data-reveal-delay="1">Brandschutz. Elektro.<br><em>Alles aus einer Hand.</em></h1>
+    <p class="hero-lede" data-reveal data-reveal-delay="2">Ihr kompetenter Ansprechpartner für alle Bereiche im Brandschutz und in der Elektrotechnik — Planung, Umsetzung und Prüfung.</p>
+    <div class="hero-ctas" data-reveal data-reveal-delay="3">
+      <a href="tel:+4915563653528" class="btn-primary">Jetzt anrufen · 0155 63 65 35 28</a>
+      <a href="#leistungen" class="btn-secondary">Leistungen entdecken →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true"><div class="marquee-track">
+  <span class="marquee-item">Brandschutzpläne</span><span class="marquee-item">Feuerlöscher</span><span class="marquee-item">DGUV V3 Prüfung</span><span class="marquee-item">Rauchmelder</span><span class="marquee-item">Brandschutztüren</span><span class="marquee-item">Rauchabzugsanlagen</span><span class="marquee-item">Elektroarbeiten</span>
+  <span class="marquee-item">Brandschutzpläne</span><span class="marquee-item">Feuerlöscher</span><span class="marquee-item">DGUV V3 Prüfung</span><span class="marquee-item">Rauchmelder</span><span class="marquee-item">Brandschutztüren</span><span class="marquee-item">Rauchabzugsanlagen</span><span class="marquee-item">Elektroarbeiten</span>
+</div></div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <span class="section-label" data-reveal>Über uns</span>
+    <div class="about-grid">
+      <div>
+        <h2 class="section-title parallax-slow" data-reveal>Planung. Umsetzung. <em>Prüfung.</em></h2>
+        <p class="section-desc" data-reveal data-reveal-delay="1">Als erfahrene Fachkräfte und Sachkundige bieten wir Ihnen umfassende Leistungen – von der Prüfung über die Planung bis hin zur behördengerechten Dokumentation.</p>
+      </div>
+      <div class="about-body" data-reveal data-reveal-delay="2">
+        <p><strong>Wir sind Ihr kompetenter Ansprechpartner</strong> für alle Bereiche im Brandschutz und in der Elektrotechnik.</p>
+        <p>Alles aus einer Hand — <strong>Planung, Umsetzung und Prüfung.</strong> Wer uns einmal beauftragt, spart sich die Suche nach dem zweiten Dienstleister.</p>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div data-reveal><span class="stat-num">2<em>J.</em></span><span class="stat-label">Garantie auf Leistungen</span></div>
+      <div data-reveal data-reveal-delay="1"><span class="stat-num">2<em>×</em></span><span class="stat-label">Gewerke aus einer Hand</span></div>
+      <div data-reveal data-reveal-delay="2"><span class="stat-num"><em>100</em>%</span><span class="stat-label">Rechtssichere Dokumentation</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="leistungen" style="background:var(--bg-2)">
+  <div class="container">
+    <span class="section-label" data-reveal>Leistungen</span>
+    <h2 class="section-title parallax-slow" data-reveal>Unsere <em>Leistungen.</em></h2>
+    <p class="section-desc" data-reveal data-reveal-delay="1">Brandschutz-Komplettservice und Elektrotechnik — alles aus einer Hand, rechtssicher und zuverlässig.</p>
+    <div class="services-grid" data-reveal data-reveal-delay="2">
+      <div class="service-col fire">
+        <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg></div>
+        <h3>Brand<em>schutz</em></h3>
+        <p class="service-intro">Komplettservice — von der Erstellung offizieller Brandschutzpläne bis zur Wartung und Prüfung.</p>
+        <ul class="service-list">
+          <li><span class="num">01</span><div class="item-body"><strong>Brandschutzpläne</strong><span>Flucht- und Rettungspläne, Feuerwehrpläne — behördengerecht.</span></div></li>
+          <li><span class="num">02</span><div class="item-body"><strong>Feuerlöscher — Prüfung &amp; Wartung</strong><span>Kostenloser Austausch innerhalb der Prüffrist bei Defekten.</span></div></li>
+          <li><span class="num">03</span><div class="item-body"><strong>Brandschutztüren &amp; Rauchmelder</strong><span>Wartung, Kontrolle, Installation und Prüfung.</span></div></li>
+          <li><span class="num">04</span><div class="item-body"><strong>Rauchabzugsanlagen (RWA)</strong><span>Fachgerechte Wartung und regelmäßige Kontrolle.</span></div></li>
+          <li><span class="num">05</span><div class="item-body"><strong>Brandschutzbegehungen</strong><span>Durchführung und Dokumentation vor Ort.</span></div></li>
+          <li><span class="num">06</span><div class="item-body"><strong>Gefährdungsbeurteilungen</strong><span>Erstellung und Unterstützung bei Nutzungsänderungen.</span></div></li>
+        </ul>
+      </div>
+      <div class="service-col spark">
+        <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+        <h3>Elektro<em>technik</em></h3>
+        <p class="service-intro">Von der DGUV V3 Prüfung bis zur allgemeinen Elektroarbeit — fachgerecht und sicher.</p>
+        <ul class="service-list">
+          <li><span class="num">01</span><div class="item-body"><strong>DGUV V3 Prüfungen</strong><span>Ortsveränderliche &amp; ortsfeste Geräte nach Vorschrift.</span></div></li>
+          <li><span class="num">02</span><div class="item-body"><strong>Sicherheitsprüfungen &amp; Messungen</strong><span>Normgerechte Überprüfung Ihrer Anlagen.</span></div></li>
+          <li><span class="num">03</span><div class="item-body"><strong>Kontrolle elektrischer Anlagen</strong><span>Regelmäßige Inspektion und Dokumentation.</span></div></li>
+          <li><span class="num">04</span><div class="item-body"><strong>Allgemeine Elektroarbeiten</strong><span>Installation, Reparatur und Instandsetzung.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section">
+  <div class="container">
+    <span class="section-label" data-reveal>Ihre Vorteile</span>
+    <h2 class="section-title parallax-slow" data-reveal>Warum Kunden uns <em>vertrauen.</em></h2>
+    <div class="benefits-grid">
+      <article class="benefit" data-reveal><div class="benefit-num">01</div><h4>Alles aus einer Hand</h4><p>Brandschutz + Elektro + Planung — ein Ansprechpartner für alles.</p></article>
+      <article class="benefit" data-reveal data-reveal-delay="1"><div class="benefit-num">02</div><h4>Offizielle Brandschutzpläne</h4><p>Erstellung behördengerechter Flucht-, Rettungs- und Feuerwehrpläne.</p></article>
+      <article class="benefit" data-reveal data-reveal-delay="2"><div class="benefit-num">03</div><h4>Schnelle Termine</h4><p>Vor-Ort-Service mit kurzen Reaktionszeiten in Ihrer Region.</p></article>
+      <article class="benefit" data-reveal data-reveal-delay="3"><div class="benefit-num">04</div><h4>Rechtssichere Dokumentation</h4><p>Prüfberichte und Nachweise — nachvollziehbar für Behörde und Versicherung.</p></article>
+      <article class="benefit" data-reveal data-reveal-delay="4"><div class="benefit-num">05</div><h4>2 Jahre Garantie</h4><p>Auf alle unsere Leistungen erhalten Sie volle 2 Jahre Garantie.</p></article>
+      <article class="benefit" data-reveal data-reveal-delay="5"><div class="benefit-num">06</div><h4>Kostenloser Austausch</h4><p>Bei Defekten innerhalb der Prüffrist tauschen wir kostenfrei aus.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing" id="preise">
+  <div class="container">
+    <span class="section-label" data-reveal>Preise</span>
+    <h2 class="section-title parallax-slow" data-reveal>Klare Pakete. <em>Keine Überraschungen.</em></h2>
+    <div class="pricing-grid">
+      <article class="price-card" data-reveal>
+        <span class="price-name">Basis</span>
+        <h3 class="price-headline">Einzel<em>prüfung</em></h3>
+        <p class="price-value">Für einzelne Geräte oder einmalige Kontrollen.</p>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Prüfung nach aktueller Norm</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Plakette &amp; Prüfzeugnis</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Mängelbericht</li>
+        </ul>
+        <a href="#kontakt" class="price-cta">Angebot anfragen</a>
+      </article>
+      <article class="price-card featured" data-reveal data-reveal-delay="1">
+        <span class="price-name">Business</span>
+        <h3 class="price-headline">Wartungs<em>vertrag</em></h3>
+        <p class="price-value">Für Unternehmen und Mehrfamilienhäuser.</p>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Jährliche Prüfung aller Geräte</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Automatische Terminerinnerung</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Kostenloser Austausch</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Digitale Prüfberichte</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bevorzugte Notdienst-Priorität</li>
+        </ul>
+        <a href="#kontakt" class="price-cta">Vertrag anfragen</a>
+      </article>
+      <article class="price-card" data-reveal data-reveal-delay="2">
+        <span class="price-name">Notdienst</span>
+        <h3 class="price-headline">24/7 Not<em>einsatz</em></h3>
+        <p class="price-value">Wenn es dringend ist — Tag und Nacht.</p>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Sofortige telefonische Ersthilfe</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Anfahrt im Raum Frankfurt</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Reparatur vor Ort</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Transparente Pauschale</li>
+        </ul>
+        <a href="tel:+4915563653528" class="price-cta">Jetzt anrufen</a>
+      </article>
+    </div>
+    <p class="price-note">Preise auf Anfrage — individuell nach Objektgröße und Geräteanzahl.</p>
+  </div>
+</section>
+
+<!-- EMERGENCY -->
+<section class="emergency">
+  <div class="emergency-inner">
+    <span class="emergency-badge" data-reveal><span class="pulse-dot"></span>Jetzt anfragen</span>
+    <h2 data-reveal data-reveal-delay="1">Von der Planung bis zur Prüfung — <em>wir kümmern uns.</em></h2>
+    <p data-reveal data-reveal-delay="2">Wir übernehmen Ihre komplette Sicherheit. Jetzt unverbindlich anfragen!</p>
+    <a href="tel:+4915563653528" class="emergency-phone" data-reveal data-reveal-delay="3"><small>Jetzt Termin vereinbaren</small><big>0155 · 63 65 35 28</big></a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="kontakt">
+  <div class="container">
+    <span class="section-label" data-reveal>Kontakt</span>
+    <h2 class="section-title parallax-slow" data-reveal>Angebot anfragen, <em>Termin vereinbaren.</em></h2>
+    <div class="contact-grid">
+      <div data-reveal>
+        <div class="contact-row"><span class="contact-label">E-Mail</span><span class="contact-value"><a href="mailto:brandundelektroservice@outlook.de">brandundelektroservice@outlook.de</a></span></div>
+        <div class="contact-row"><span class="contact-label">Telefon</span><span class="contact-value"><a href="tel:+4915563653528">0155 / 63 65 35 28</a><br><em>Jetzt Termin vereinbaren</em></span></div>
+        <div class="contact-row"><span class="contact-label">Gebiet</span><span class="contact-value">Frankfurt, Wiesbaden, Mainz<br><em>Darmstadt &amp; Umgebung</em></span></div>
+      </div>
+      <form class="contact-form" data-reveal data-reveal-delay="1" onsubmit="handleSubmit(event)">
+        <h3>Nachricht <em>senden</em></h3>
+        <p>Schreiben Sie uns kurz — wir melden uns werktags innerhalb eines Tages.</p>
+        <div class="form-field"><label for="name">Name</label><input type="text" id="name" name="name" required></div>
+        <div class="form-field"><label for="email">E-Mail</label><input type="email" id="email" name="email" required></div>
+        <div class="form-field"><label for="topic">Anliegen</label><select id="topic" name="topic"><option>Brandschutz-Prüfung</option><option>Feuerlöscher-Wartung</option><option>Elektro-Installation</option><option>Wartungsvertrag</option><option>Sonstiges</option></select></div>
+        <div class="form-field"><label for="message">Nachricht</label><textarea id="message" name="message" required></textarea></div>
+        <button type="submit" class="form-submit">Nachricht senden →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <svg class="logo-mark" viewBox="0 0 80 100" fill="none"><defs><linearGradient id="fo2" x1=".3" y1="0" x2=".7" y2="1"><stop stop-color="#e8501a"/><stop offset="1" stop-color="#d94315"/></linearGradient><linearGradient id="fm2" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#f2832e"/><stop offset="1" stop-color="#e66b20"/></linearGradient><linearGradient id="fi2" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#f5d94a"/><stop offset="1" stop-color="#e8c425"/></linearGradient></defs><path d="M40 2C38 8 32 20 28 32 22 48 16 58 12 68 8 78 14 96 32 96 22 88 20 76 28 62 34 52 48 36 52 24 56 14 54 4 40 2Z" fill="url(#fo2)"/><path d="M42 18C40 26 36 36 34 46 30 60 28 70 30 80 32 90 42 96 50 88 40 84 36 74 40 62 44 50 54 38 56 28 58 18 52 12 42 18Z" fill="url(#fm2)"/><path d="M44 38C42 46 40 54 40 62 40 72 44 80 50 82 46 76 46 68 48 60 50 52 54 44 52 38 50 34 46 34 44 38Z" fill="url(#fi2)"/></svg>
+          <span class="logo-text">Brand <span class="amp">&amp;</span> Elektroservice<span class="logo-sub">Frankfurt · Rhein-Main</span></span>
+        </a>
+        <p>Brandschutz und Elektrotechnik aus einer Hand — Planung, Umsetzung und Prüfung.</p>
+      </div>
+      <div><h5>Leistungen</h5><ul><li><a href="#leistungen">Brandschutz</a></li><li><a href="#leistungen">Elektrotechnik</a></li><li><a href="#preise">Preise</a></li></ul></div>
+      <div><h5>Kontakt</h5><ul><li><a href="tel:+4915563653528">0155 / 63 65 35 28</a></li><li><a href="mailto:brandundelektroservice@outlook.de">E-Mail senden</a></li></ul></div>
+      <div><h5>Einsatzgebiet</h5><ul><li>Frankfurt · Wiesbaden</li><li>Mainz · Darmstadt</li><li><a href="tel:+4915563653528" style="color:var(--accent);font-weight:600">→ Jetzt anrufen</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Brand & Elektroservice · Rhein-Main</span>
+      <span><a href="#" id="link-impressum">Impressum</a> · <a href="#" id="link-datenschutz">Datenschutz</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- IMPRESSUM MODAL -->
+<div class="legal-overlay" id="impressum-overlay">
+  <div class="legal-modal" role="dialog" aria-labelledby="impressum-title">
+    <header class="legal-modal-header">
+      <h3 id="impressum-title">Impressum</h3>
+      <button class="legal-modal-close" aria-label="Schließen">✕</button>
+    </header>
+    <div class="legal-modal-body">
+      <h4>Angaben gemäß § 5 TMG</h4>
+      <p>Brand & Elektroservice<br>
+      [Vor- und Nachname des Inhabers]<br>
+      [Straße und Hausnummer]<br>
+      [PLZ Ort]</p>
+
+      <h4>Kontakt</h4>
+      <p>Telefon: 0155 63 65 35 28<br>
+      E-Mail: <a href="mailto:brandundelektroservice@outlook.de">brandundelektroservice@outlook.de</a></p>
+
+      <h4>Umsatzsteuer-ID</h4>
+      <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br>
+      [USt-IdNr. hier einfügen]</p>
+
+      <h4>Berufsbezeichnung und berufsrechtliche Regelungen</h4>
+      <p>[Berufsbezeichnung, z. B. Sachkundiger für Brandschutz]<br>
+      Verliehen in: Bundesrepublik Deutschland</p>
+
+      <h4>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h4>
+      <p>[Vor- und Nachname]<br>
+      [Anschrift wie oben]</p>
+
+      <h4>Streitschlichtung</h4>
+      <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>.</p>
+      <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+      <h4>Haftung für Inhalte</h4>
+      <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>
+
+      <h4>Haftung für Links</h4>
+      <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DATENSCHUTZ MODAL -->
+<div class="legal-overlay" id="datenschutz-overlay">
+  <div class="legal-modal" role="dialog" aria-labelledby="datenschutz-title">
+    <header class="legal-modal-header">
+      <h3 id="datenschutz-title">Datenschutz<em>erklärung</em></h3>
+      <button class="legal-modal-close" aria-label="Schließen">✕</button>
+    </header>
+    <div class="legal-modal-body">
+      <h4>1. Datenschutz auf einen Blick</h4>
+      <p>Die folgenden Hinweise geben einen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>
+
+      <h4>2. Verantwortliche Stelle</h4>
+      <p>Brand & Elektroservice<br>
+      [Vor- und Nachname]<br>
+      [Straße und Hausnummer]<br>
+      [PLZ Ort]<br>
+      Telefon: 0155 63 65 35 28<br>
+      E-Mail: <a href="mailto:brandundelektroservice@outlook.de">brandundelektroservice@outlook.de</a></p>
+
+      <h4>3. Datenerfassung auf dieser Website</h4>
+      <p><strong>Wer ist verantwortlich für die Datenerfassung?</strong><br>
+      Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber (siehe Impressum).</p>
+      <p><strong>Wie erfassen wir Ihre Daten?</strong><br>
+      Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen, z. B. über unser Kontaktformular. Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst (z. B. Browser, Betriebssystem, Uhrzeit des Zugriffs).</p>
+
+      <h4>4. Kontaktformular</h4>
+      <p>Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben (Name, E-Mail, Nachricht) zwecks Bearbeitung der Anfrage bei uns gespeichert. Eine Weitergabe an Dritte findet nicht statt.</p>
+
+      <h4>5. Cookies</h4>
+      <p>Diese Website verwendet Cookies. Dabei handelt es sich um kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Wir verwenden ausschließlich technisch notwendige Cookies, sofern Sie nicht ausdrücklich allen Cookies zustimmen.</p>
+
+      <h4>6. Ihre Rechte</h4>
+      <p>Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger sowie den Zweck der Datenverarbeitung. Sie haben außerdem ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten.</p>
+      <ul>
+        <li>Recht auf Auskunft (§ 15 DSGVO)</li>
+        <li>Recht auf Berichtigung (§ 16 DSGVO)</li>
+        <li>Recht auf Löschung (§ 17 DSGVO)</li>
+        <li>Recht auf Einschränkung (§ 18 DSGVO)</li>
+        <li>Recht auf Datenübertragbarkeit (§ 20 DSGVO)</li>
+        <li>Widerspruchsrecht (§ 21 DSGVO)</li>
+      </ul>
+
+      <h4>7. SSL-Verschlüsselung</h4>
+      <p>Diese Seite nutzt aus Sicherheitsgründen eine SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cookie-inner">
+    <div class="cookie-text">
+      <h4>🍪 Cookie-Einstellungen</h4>
+      <p>Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung zu bieten. Weitere Informationen finden Sie in unserer <a href="#">Datenschutzerklärung</a>.</p>
+    </div>
+    <div class="cookie-actions">
+      <button class="cookie-btn accept cookie-accept">Alle akzeptieren</button>
+      <button class="cookie-btn decline cookie-decline">Nur notwendige</button>
+    </div>
+  </div>
+</div>
+
+<!-- ACCESSIBILITY WIDGET -->
+<button class="a11y-toggle" id="a11y-toggle" aria-label="Barrierefreiheit">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.5"/><path d="M12 7v6"/><path d="M8 21l2-7"/><path d="M16 21l-2-7"/><path d="M6 12h12"/></svg>
+</button>
+<div class="a11y-panel" id="a11y-panel">
+  <h4>Barrierefreiheit</h4>
+  <p class="a11y-sub">Passen Sie die Darstellung an Ihre Bedürfnisse an.</p>
+  <div class="a11y-group">
+    <div class="a11y-group-label">Schriftgröße</div>
+    <div class="a11y-row">
+      <span>Text-Skalierung</span>
+      <div class="a11y-row-controls">
+        <button class="a11y-btn" id="a11y-size-down" aria-label="Kleiner">A−</button>
+        <span class="a11y-size-display" id="a11y-size-val">100%</span>
+        <button class="a11y-btn" id="a11y-size-up" aria-label="Größer">A+</button>
+      </div>
+    </div>
+  </div>
+  <div class="a11y-group">
+    <div class="a11y-group-label">Darstellung</div>
+    <div class="a11y-row">
+      <span>Hoher Kontrast</span>
+      <div class="a11y-switch" id="a11y-contrast" role="switch" aria-label="Hoher Kontrast"></div>
+    </div>
+    <div class="a11y-row">
+      <span>Lesehilfe</span>
+      <div class="a11y-switch" id="a11y-guide" role="switch" aria-label="Lesehilfe"></div>
+    </div>
+  </div>
+  <button class="a11y-reset" id="a11y-reset">Zurücksetzen</button>
+</div>
+
+<!-- READING GUIDE LINE -->
+<div class="reading-guide" id="reading-guide"></div>
+
+<script src="main.js"></script>
+</body>
+</html>
