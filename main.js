@@ -86,6 +86,20 @@ const priceIO = new IntersectionObserver((entries) => {
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 priceCards.forEach(card => priceIO.observe(card));
 
+// ─── REFERENZEN GALLERY SCROLL ENTRANCE ───
+const refGallery = document.querySelector('.ref-gallery');
+if (refGallery) {
+  const refIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        refIO.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  refIO.observe(refGallery);
+}
+
 // ─── SECTION TITLE WORD SPLIT ───
 document.querySelectorAll('.section-title').forEach(title => {
   const html = title.innerHTML;
