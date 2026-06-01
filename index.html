@@ -47,6 +47,7 @@
   html {
     scroll-behavior: smooth;
     scrollbar-color: var(--fire) var(--bg);
+    overflow-x: hidden;
   }
 
   body {
@@ -60,6 +61,25 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Custom premium scrollbar styling to force Safari visibility and match fire theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 5px;
+    border: 2.5px solid var(--bg);
+    transition: background 0.2s ease;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--fire);
   }
 
   /* grain overlay */
@@ -1410,13 +1430,16 @@
   .scroll-progress {
     position: fixed;
     top: 0; left: 0;
-    height: 2px;
-    width: 0;
+    height: 3px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
     background: linear-gradient(90deg, var(--fire) 0%, var(--ember) 100%);
     box-shadow: 0 0 10px rgba(255, 61, 20, 0.6);
-    z-index: 999;
-    transition: width 0.12s cubic-bezier(0.33, 1, 0.68, 1);
+    z-index: 9999;
     pointer-events: none;
+    will-change: transform;
+    transition: transform 0.1s linear;
   }
 
   /* Canvas fire — hero: refined ember glow layer */
@@ -2542,7 +2565,7 @@
   toggle.addEventListener('click', () => nav.classList.toggle('open'));
   nav.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
 
-  // Scroll reveal — trigger slightly before element fully enters viewport
+  // Scroll reveal — optimized with lower threshold and responsive rootMargin for Safari
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -2550,9 +2573,25 @@
         io.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
+  }, { threshold: 0.01, rootMargin: '0px 0px -20px 0px' });
 
   document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  // Failsafe-Fallback: Falls der Observer in Safari hakt, Elemente beim Scrollen/Laden erzwingen
+  function failsafeReveal() {
+    const elements = document.querySelectorAll('[data-reveal]:not(.is-visible)');
+    if (elements.length === 0) return;
+    const triggerHeight = window.innerHeight * 0.95;
+    elements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < triggerHeight) {
+        el.classList.add('is-visible');
+      }
+    });
+  }
+  window.addEventListener('scroll', failsafeReveal, { passive: true });
+  window.addEventListener('resize', failsafeReveal, { passive: true });
+  failsafeReveal();
 
   // Respect reduced motion
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2561,9 +2600,13 @@
   const scrollBar = document.getElementById('scroll-progress');
   let ticking = false;
   function updateScroll() {
+    // Safari gibt bei documentElement.scrollTop oft 0 zurück → window.scrollY verwenden
+    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     const h = document.documentElement;
-    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    scrollBar.style.width = pct + '%';
+    const scrollHeight = h.scrollHeight - h.clientHeight;
+    const pct = scrollHeight > 0 ? (scrollY / scrollHeight) : 0;
+    // scaleX nutzt GPU-Beschleunigung und ist 100% flimmerfrei in Safari
+    scrollBar.style.transform = `scaleX(${pct})`;
     ticking = false;
   }
   window.addEventListener('scroll', () => {
@@ -2572,6 +2615,8 @@
       ticking = true;
     }
   }, { passive: true });
+  // Initialer Aufruf
+  updateScroll();
 
   // ─────────────── EMBER PARTICLE LAYER ───────────────
   if (!prefersReducedMotion) {
